@@ -1,15 +1,21 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import { ChevronsLeft, MenuIcon, PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { ElementRef, useRef, useState } from "react";
+import { ElementRef, use, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import UserItem from "./userItem";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Item } from "./item";
 
 const Navigation = () => {
   const pathname = usePathname();
   //check if it is mobile or desktop
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const documents = useQuery(api.documents.get);
 
   const isResizingRef = useRef(false);
   //Extract the type from the element
@@ -17,6 +23,20 @@ const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+
+  useEffect(() => {
+    if (isMobile) {
+      collapse();
+    } else {
+      resetWidth();
+    }
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (isMobile) {
+      collapse();
+    }
+  }, [pathname]);
 
   const handleMouseDown = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -58,11 +78,11 @@ const Navigation = () => {
       sidebarRef.current.style.width = isMobile ? "100%" : "240px";
       navbarRef.current.style.width = isMobile ? "0" : "calc(100%-240px)";
       navbarRef.current.style.left = isMobile ? "100%" : "240px";
-    }
 
-    setTimeout(() => {
-      setIsResetting(false);
-    }, 300);
+      setTimeout(() => {
+        setIsResetting(false);
+      }, 300);
+    }
   };
 
   const collapse = () => {
@@ -73,15 +93,15 @@ const Navigation = () => {
       sidebarRef.current.style.width = "0";
       navbarRef.current.style.width = "100%";
       navbarRef.current.style.left = "0";
-    }
 
-    setTimeout(() => {
-      setIsResetting(false);
-    }, 300);
+      setTimeout(() => {
+        setIsResetting(false);
+      }, 300);
+    }
   };
 
   return (
-    <div>
+    <>
       <aside
         ref={sidebarRef}
         className={cn(
@@ -101,10 +121,13 @@ const Navigation = () => {
           <ChevronsLeft className="w-6 h-6" />
         </div>
         <div>
-          <p>Action Items</p>
+          <UserItem />
+          <Item onClick={() => {}} label="New page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          <p>Documents</p>
+          {documents?.map((document) => (
+            <p>{document.title}</p>
+          ))}
         </div>
         <div
           onMouseDown={handleMouseDown}
@@ -123,11 +146,15 @@ const Navigation = () => {
       >
         <nav className="bg-transparent px-3 py-2 w-full">
           {isCollapsed && (
-            <MenuIcon role="button" onClick={resetWidth} className="h-6 w-6 text-muted-foreground" />
+            <MenuIcon
+              role="button"
+              onClick={resetWidth}
+              className="h-6 w-6 text-muted-foreground"
+            />
           )}
         </nav>
       </div>
-    </div>
+    </>
   );
 };
 
