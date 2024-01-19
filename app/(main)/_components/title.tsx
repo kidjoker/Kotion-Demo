@@ -11,6 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface TitleProps {
   initialData: Doc<"documents">;
 }
+
+/* eslint-disable react/display-name */
 export const Title = ({ initialData }: TitleProps) => {
   const update = useMutation(api.documents.update);
   const inputRef = useRef<HTMLInputElement>(null);

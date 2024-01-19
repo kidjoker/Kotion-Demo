@@ -39,6 +39,7 @@ interface ItemProps {
   icon: LucideIcon;
 }
 
+/* eslint-disable react/display-name */
 export const Item = ({
   id,
   label,

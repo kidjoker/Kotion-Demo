@@ -22,6 +22,7 @@ interface MenuProps {
   documentId: Id<"documents">;
 }
 
+/* eslint-disable react/display-name */
 export const Menu = ({ documentId }: MenuProps) => {
   const router = useRouter();
   const { user } = useUser();

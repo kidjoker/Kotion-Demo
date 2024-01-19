@@ -16,6 +16,8 @@ interface CoverImageProps {
   url?: string;
   preview?: boolean;
 }
+
+/* eslint-disable react/display-name */
 export const CoverImage = ({ url, preview }: CoverImageProps) => {
   const coverImage = useCoverImage();
   const removeCoverImage = useMutation(api.documents.removeCoverImage);

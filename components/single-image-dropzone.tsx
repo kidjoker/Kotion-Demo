@@ -221,4 +221,5 @@ function formatFileSize(bytes?: number) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
+SingleImageDropzone.displayName = 'SingleImageDropzone';
 export { SingleImageDropzone };

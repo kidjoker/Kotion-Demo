@@ -29,6 +29,7 @@ import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
 import { Navbar } from "./navbar";
 
+/* eslint-disable react/display-name */
 const Navigation = () => {
   const pathname = usePathname();
   const params = useParams();
