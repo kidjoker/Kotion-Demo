@@ -16,14 +16,17 @@ interface DocumentIdPageProps {
 }
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
-  const Editor = useMemo(() => dynamic(() => import("@/components/editor"), {ssr: false}), [])
+  const Editor = useMemo(
+    () => dynamic(() => import("@/components/editor"), { ssr: false }),
+    []
+  );
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId,
   });
 
   const update = useMutation(api.documents.update);
 
-  if (document === undefined) { 
+  if (document === undefined) {
     return (
       <>
         <CoverImage.Skeleton />
@@ -50,10 +53,14 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
 
   return (
     <div className="pb-40">
-      <CoverImage url={document?.coverImage} />
+      <CoverImage preview url={document?.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto mt-10">
-        <Toolbar initialData={document} />
-        <Editor onChange={onChange} initialContent={document.content} />
+        <Toolbar preview initialData={document} />
+        <Editor
+          editable={false}
+          onChange={onChange}
+          initialContent={document.content}
+        />
       </div>
     </div>
   );
